@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"搜索帖子","hits_empty":"我们没有找到任何搜索结果: ${query}","hits_stats":"在 ${time} 毫秒内找到 ${hits} 结果"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一些中间件的漏洞尝试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中间件">
+<meta property="og:url" content="http://example.com/2024/12/22/%E4%B8%AD%E9%97%B4%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一些中间件的漏洞尝试">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/WXaTLpJ.gif">
+<meta property="og:image" content="https://i.imgur.com/NOI5AzX.gif">
+<meta property="og:image" content="https://i.imgur.com/r4J46KJ.gif">
+<meta property="og:image" content="https://i.imgur.com/FAepT9T.gif">
+<meta property="og:image" content="https://i.imgur.com/HFXnSMs.gif">
+<meta property="og:image" content="https://i.imgur.com/B2JFg5b.gif">
+<meta property="og:image" content="https://i.imgur.com/XRxusrD.gif">
+<meta property="og:image" content="https://i.imgur.com/wANErvN.gif">
+<meta property="og:image" content="https://i.imgur.com/W9dGK05.gif">
+<meta property="og:image" content="https://i.imgur.com/Gg0xxmQ.png">
+<meta property="og:image" content="https://i.imgur.com/g2nxpG5.png">
+<meta property="og:image" content="https://i.imgur.com/YLGARbV.gif">
+<meta property="og:image" content="https://i.imgur.com/9EFLRg2.gif">
+<meta property="og:image" content="https://i.imgur.com/TIqN1Ip.gif">
+<meta property="og:image" content="https://i.imgur.com/QFrmJdF.gif">
+<meta property="og:image" content="https://i.imgur.com/QLdlNvY.gif">
+<meta property="og:image" content="https://i.imgur.com/9HGUX0F.gif">
+<meta property="og:image" content="https://i.imgur.com/Xl2zyz5.png">
+<meta property="og:image" content="https://i.imgur.com/Rj9H5wU.gif">
+<meta property="og:image" content="https://i.imgur.com/PNdSYas.gif">
+<meta property="og:image" content="https://i.imgur.com/guAMRbo.gif">
+<meta property="og:image" content="https://i.imgur.com/UbdriTT.gif">
+<meta property="og:image" content="https://i.imgur.com/nSzFucT.gif">
+<meta property="og:image" content="https://i.imgur.com/QRFXNjz.gif">
+<meta property="og:image" content="https://i.imgur.com/M5eTRFU.png">
+<meta property="og:image" content="https://i.imgur.com/DsZ2bAi.gif">
+<meta property="og:image" content="https://i.imgur.com/WMkEN03.gif">
+<meta property="article:published_time" content="2024-12-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-22T13:21:10.122Z">
+<meta property="article:author" content="kec的博客">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/WXaTLpJ.gif">
+
+<link rel="canonical" href="http://example.com/2024/12/22/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>中间件 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/22/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          中间件
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-12-22 00:00:00 / 修改时间：21:21:10" itemprop="dateCreated datePublished" datetime="2024-12-22T00:00:00+08:00">2024-12-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>一些中间件的漏洞尝试</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<span id="more"></span>
+
+<h1 id="Apache中间件"><a href="#Apache中间件" class="headerlink" title="Apache中间件"></a>Apache中间件</h1><p>apache目录结构:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bin：存放常用命令工具，如httpd </span><br><span class="line">cgi-bin：存放linux下常用命令，如xxx.sh error：错误记录 </span><br><span class="line">htdocs：网站源码 </span><br><span class="line">icons：网站图标 </span><br><span class="line">manual：手册 </span><br><span class="line">modules：扩展模块</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="ApacheHTTPD换行解析漏洞（CVE-2017-15715"><a href="#ApacheHTTPD换行解析漏洞（CVE-2017-15715" class="headerlink" title="ApacheHTTPD换行解析漏洞（CVE-2017-15715)"></a>ApacheHTTPD换行解析漏洞（CVE-2017-15715)</h3><p>Apache HTTPD是一款HTTP服务器，它可以通过mod_php来运行PHP网页。</p>
+<p>其2.4.0~2.4.29版本中存在一个解析漏洞，在解析PHP时，<code>1.php\x0a</code>将被按照PHP后缀进行解析，导致绕过一些服务器的安全策略。</p>
+<p>可以看到这里获取文件名是需要单独<code>$post[&#39;name&#39;]</code>的，因为如果通过<code>$_FILES[&#39;file&#39;][&#39;name&#39;]</code>获取文件名的话，会把<code>\x0a</code>自动去除，所以<code>$_FILE[&#39;file&#39;][&#39;name&#39;]</code>这种方式获取文件名就不会造成这个漏洞</p>
+<p>影响范围：Apache 2.4.0~2.4.29</p>
+<p>到指定目录打开docker镜像环境<br><img src="https://i.imgur.com/WXaTLpJ.gif"></p>
+<p>等待下载完成后网页访问<br><img src="https://i.imgur.com/NOI5AzX.gif"></p>
+<p>选择文件<br><img src="https://i.imgur.com/r4J46KJ.gif"></p>
+<p>抓包改包，把1.php修改成1.phpa,这里从显示bad file到成功上传<br><img src="https://i.imgur.com/FAepT9T.gif"></p>
+<p>尝试访问，确认成功上传，只不过没有被解析<br><img src="https://i.imgur.com/HFXnSMs.gif"></p>
+<p>修改hex值，将a对应的部分修改成0a,这里是换行符的意思<br><img src="https://i.imgur.com/B2JFg5b.gif"></p>
+<p>成功访问并解析<br><img src="https://i.imgur.com/XRxusrD.gif"></p>
+<h3 id="Apache-HTTP-Server-2-4-49-路径穿越漏洞（CVE-2021-41773）"><a href="#Apache-HTTP-Server-2-4-49-路径穿越漏洞（CVE-2021-41773）" class="headerlink" title="Apache HTTP Server 2.4.49 路径穿越漏洞（CVE-2021-41773）"></a>Apache HTTP Server 2.4.49 路径穿越漏洞（CVE-2021-41773）</h3><p>Apache HTTP Server 2.4.49、2.4.50版本对路径规范化所做的更改中存在一个路径穿越漏洞，攻击者可利用该漏洞读取到Web目录外的其他文件，如系统配置文件、网站源码等，甚至在特定情况下，攻击者可构造恶意请求执行命令，控制服务器。</p>
+<p>影响范围：Apache 2.4.49~2.4.50</p>
+<p>抓包改包，插入payload:<code>/icons/.%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd</code><br><img src="https://i.imgur.com/wANErvN.gif"></p>
+<p>注意，直接输入url是无法正常访问到的<br><img src="https://i.imgur.com/W9dGK05.gif"></p>
+<h3 id="Apache-HTTP-Server-2-4-50-路径穿越漏洞（CVE-2021-42013）"><a href="#Apache-HTTP-Server-2-4-50-路径穿越漏洞（CVE-2021-42013）" class="headerlink" title="Apache HTTP Server 2.4.50 路径穿越漏洞（CVE-2021-42013）"></a>Apache HTTP Server 2.4.50 路径穿越漏洞（CVE-2021-42013）</h3><p>CVE-2021-42013 是由 CVE-2021-41773 修复不完整所致的漏洞，攻击者可能使用路<br>径遍历攻击将 URL 映射到类似别名指令配置的目录之外的文件。</p>
+<p><img src="https://i.imgur.com/Gg0xxmQ.png"></p>
+<h3 id="Apache-SSI-远程命令执行漏洞"><a href="#Apache-SSI-远程命令执行漏洞" class="headerlink" title="Apache SSI 远程命令执行漏洞"></a>Apache SSI 远程命令执行漏洞</h3><p>在测试任意文件上传漏洞的时候，目标服务端可能不允许上传 php 后缀的文件，当目<br>标服务器开启了 SSI 与 CGI 支持，我们就可以上传 shtml，利用<!--#exec cmd="ls /" --><br>语法来执行命令。<br>使用 SSI(Server Side Include)的 html 文件扩展名，SSI（Server Side Include)，通常称为<br>“服务器端嵌入”或者叫”服务器端包含”，是一种类似于 ASP 的基于服务器的网页制作<br>技术。默认扩展</p>
+<p>构造poc<br>新建文本文档，输入<code>&lt;!--#exec cmd=&quot;id&quot; --&gt;</code>，保存后修改后缀为shtml<br><img src="https://i.imgur.com/g2nxpG5.png"></p>
+<p>上传poc<br><img src="https://i.imgur.com/YLGARbV.gif"></p>
+<h1 id="Tomcat-中间件"><a href="#Tomcat-中间件" class="headerlink" title="Tomcat 中间件"></a>Tomcat 中间件</h1><h3 id="Tomcat-弱密码-后端-Getshell-漏洞"><a href="#Tomcat-弱密码-后端-Getshell-漏洞" class="headerlink" title="Tomcat 弱密码 &amp;&amp; 后端 Getshell 漏洞"></a>Tomcat 弱密码 &amp;&amp; 后端 Getshell 漏洞</h3><p>账户密码都是tomcat,访问<br><img src="https://i.imgur.com/9EFLRg2.gif"></p>
+<p>制作poc</p>
+<ul>
+<li>生成jsp木马文件<br><img src="https://i.imgur.com/TIqN1Ip.gif"></li>
+<li>重命名为shell.php，压缩成<code>.zip</code>文件，重命名为<code>.war</code>文件<br><img src="https://i.imgur.com/QFrmJdF.gif"></li>
+</ul>
+<p>上传poc文件<br><img src="https://i.imgur.com/QLdlNvY.gif"></p>
+<p>使用中国蚁剑进行连接<br><img src="https://i.imgur.com/9HGUX0F.gif"></p>
+<h1 id="Nginx-中间件"><a href="#Nginx-中间件" class="headerlink" title="Nginx 中间件"></a>Nginx 中间件</h1><h3 id="Nginx-文件名逻辑漏洞（CVE-2013-4547）"><a href="#Nginx-文件名逻辑漏洞（CVE-2013-4547）" class="headerlink" title="Nginx 文件名逻辑漏洞（CVE-2013-4547）"></a>Nginx 文件名逻辑漏洞（CVE-2013-4547）</h3><p>构造poc</p>
+<p>前面加上GIF98A作为图片格式的标识，后面加入php代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">file_put_contents</span>(<span class="string">&#x27;cmd.php&#x27;</span>,<span class="string">&#x27;&lt;?php eval($_POST[&quot;cmd&quot;])?&gt;&#x27;</span>)<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F; 使用 file_put_contents 函数创建或覆盖一个名为 ‘cmd.php’ 的文件。<br>&#x2F;&#x2F; 文件内容是一个一句话木马：<code>&lt;?php eval($_POST[&quot;cmd&quot;])?&gt;</code></p>
+<p><img src="https://i.imgur.com/Xl2zyz5.png"></p>
+<p>提前开启拦截，然后提交构造好的poc，bp拦截到包<br><img src="https://i.imgur.com/Rj9H5wU.gif"></p>
+<p>文件名的后缀添加一个空格，然后关闭拦截<br><img src="https://i.imgur.com/PNdSYas.gif"></p>
+<p>修改url再刷新发送请求<br><img src="https://i.imgur.com/guAMRbo.gif"></p>
+<p>抓包进行修改，然后发包，显示了GIF98A，说明成功访问到了文件</p>
+<ul>
+<li>将%20替换为空格</li>
+<li>将hex中a的61替换成00<br><img src="https://i.imgur.com/UbdriTT.gif"></li>
+</ul>
+<p>访问cmd.php，成功访问到，说明成功解析了<br><img src="https://i.imgur.com/nSzFucT.gif"></p>
+<p>连接到木马<br><img src="https://i.imgur.com/QRFXNjz.gif"></p>
+<h3 id="Nginx-解析漏洞（nginx-parsing-vulnerability）"><a href="#Nginx-解析漏洞（nginx-parsing-vulnerability）" class="headerlink" title="Nginx 解析漏洞（nginx_parsing_vulnerability）"></a>Nginx 解析漏洞（nginx_parsing_vulnerability）</h3><p>命令执行，获取服务器 web 权限，1.jpg&#x2F;.php -&gt; 1.jpg 会被当成 php 格式解析<br>NGINX 解析漏洞主要是由于 NGINX 配置文件以及 PHP 配置文件的错误配置导致的。<br>这个漏洞与 NGINX、PHP 版本无关，属于用户配置不当造成的解析漏洞。具体来说，<br>由于 nginx.conf 的配置导致 nginx 把以’.php’结尾的文件交给 fastcgi 处理，对于任意<br>文件名，在后面添加&#x2F;xxx.php（xxx 为任意字符）后，即可将文件作为 php 解析。<br>当攻击者访问&#x2F;phpinfo.jpg&#x2F;abc.php 时，Nginx 将查看 URL，看到他以.php 结尾，并<br>将路径传递给 php fastcgi 处理程序，php 看到&#x2F;phpinfo.jpg&#x2F;abc.php 不存在，便删除去最<br>后的&#x2F;abc.php，看到 phpinfo.jpg 存在，而后以 php 的形式执行.jpg 的内容。<br>这里涉及到 php 的有一个选择：cgi.fix_pathinfo，该配置默认为 1，开启状态，表<br>示对文件路径进行“修理”。当 php 遇到文件路径“&#x2F;1.aaa&#x2F;2.bbb&#x2F;3.cccc”文件时，若<br>“&#x2F;1.aaa&#x2F;2.bbb&#x2F;3.cccc”不存在，则会去掉最后的”&#x2F;3.ccc”,然后判断“&#x2F;1.aaa&#x2F;2.bbb”是否<br>存在，若不存在，则继续去掉“&#x2F;2.bbb”,以此类推</p>
+<p>构造poc<br><img src="https://i.imgur.com/M5eTRFU.png"></p>
+<p><img src="https://i.imgur.com/DsZ2bAi.gif"></p>
+<p>访问路径，在末尾加上<code>/.php</code>,将其作为php解析<br><img src="https://i.imgur.com/WMkEN03.gif"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/shell/" rel="tag"># shell</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/12/14/%E5%8D%8F%E8%AE%AE%E9%80%86%E5%90%91%E5%AD%A6%E4%B9%A0%E5%B0%9D%E8%AF%95/" rel="prev" title="netzob相关">
+      <i class="fa fa-chevron-left"></i> netzob相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/03/test/" rel="next" title="test">
+      test <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">Apache中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ApacheHTTPD%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2017-15715"><span class="nav-number">1.0.1.</span> <span class="nav-text">ApacheHTTPD换行解析漏洞（CVE-2017-15715)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-HTTP-Server-2-4-49-%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-41773%EF%BC%89"><span class="nav-number">1.0.2.</span> <span class="nav-text">Apache HTTP Server 2.4.49 路径穿越漏洞（CVE-2021-41773）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-HTTP-Server-2-4-50-%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2021-42013%EF%BC%89"><span class="nav-number">1.0.3.</span> <span class="nav-text">Apache HTTP Server 2.4.50 路径穿越漏洞（CVE-2021-42013）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-SSI-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.4.</span> <span class="nav-text">Apache SSI 远程命令执行漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tomcat-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">Tomcat 中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat-%E5%BC%B1%E5%AF%86%E7%A0%81-%E5%90%8E%E7%AB%AF-Getshell-%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.0.1.</span> <span class="nav-text">Tomcat 弱密码 &amp;&amp; 后端 Getshell 漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">Nginx 中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-%E6%96%87%E4%BB%B6%E5%90%8D%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2013-4547%EF%BC%89"><span class="nav-number">3.0.1.</span> <span class="nav-text">Nginx 文件名逻辑漏洞（CVE-2013-4547）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E%EF%BC%88nginx-parsing-vulnerability%EF%BC%89"><span class="nav-number">3.0.2.</span> <span class="nav-text">Nginx 解析漏洞（nginx_parsing_vulnerability）</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kec的博客"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">kec的博客</p>
+  <div class="site-description" itemprop="description">一句话的长度</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://1234567fang.github.io/" title="https:&#x2F;&#x2F;1234567fang.github.io&#x2F;" rel="noopener" target="_blank">友链</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kec的博客</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

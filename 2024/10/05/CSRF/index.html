@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"搜索帖子","hits_empty":"我们没有找到任何搜索结果: ${query}","hits_stats":"在 ${time} 毫秒内找到 ${hits} 结果"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于CSRF的基础学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSRF基础学习">
+<meta property="og:url" content="http://example.com/2024/10/05/CSRF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于CSRF的基础学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image.png">
+<meta property="og:image" content="https://i.imgur.com/zCtSKxv.png">
+<meta property="og:image" content="https://i.imgur.com/gAMY0Kj.png">
+<meta property="og:image" content="https://i.imgur.com/CKb0yv1.png">
+<meta property="og:image" content="https://i.imgur.com/8Pj4ADu.png">
+<meta property="og:image" content="https://i.imgur.com/0HeaNxc.png">
+<meta property="og:image" content="https://i.imgur.com/xiSnCcC.png">
+<meta property="og:image" content="https://i.imgur.com/CKmbzkd.gif">
+<meta property="og:image" content="https://i.imgur.com/gzLsRoZ.gif">
+<meta property="og:image" content="https://i.imgur.com/Wh909dP.gif">
+<meta property="og:image" content="https://i.imgur.com/T36mbWp.png">
+<meta property="og:image" content="https://i.imgur.com/LUwe3oA.gif">
+<meta property="og:image" content="https://i.imgur.com/1pVqd0P.gif">
+<meta property="og:image" content="https://i.imgur.com/zfr8vOO.png">
+<meta property="article:published_time" content="2024-10-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-18T01:44:33.910Z">
+<meta property="article:author" content="kec的博客">
+<meta property="article:tag" content="csrf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/image.png">
+
+<link rel="canonical" href="http://example.com/2024/10/05/CSRF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSRF基础学习 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/05/CSRF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSRF基础学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-05 00:00:00" itemprop="dateCreated datePublished" datetime="2024-10-05T00:00:00+08:00">2024-10-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-18 09:44:33" itemprop="dateModified" datetime="2024-12-18T09:44:33+08:00">2024-12-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>关于CSRF的基础学习</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<span id="more"></span>
+
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>全称Cross-site request forgery，翻译过来就是跨站请求伪造，属于纯逻辑漏洞</p>
+<p>指利用受害者尚未失效的身份认证信息（cookie、会话等），诱骗其点击恶意链接或者访问包含攻击代码的页面，在受害人不知情的情况下以受害者的身份向（身份认证信息所对应的）服务器发送请求，从而完成非法操作(如转账、改密等）</p>
+<p><strong>CSRF与XSS最大的区别就在于，CSRF并没有盗取cookie而是直接利用</strong></p>
+<p><img src="/../img/image.png"></p>
+<p><img src="https://i.imgur.com/zCtSKxv.png"></p>
+<h1 id="攻击演示"><a href="#攻击演示" class="headerlink" title="攻击演示"></a>攻击演示</h1><p>环境：pikachu靶场</p>
+<p><img src="https://i.imgur.com/gAMY0Kj.png"></p>
+<p>构造恶意链接:<br><code>http://192.168.0.215/pikachu-master/vul/csrf/csrfget/csrf_get_edit.php?sex=aaa&amp;phonenum=aaa&amp;add=aaa&amp;email=aaaa&amp;submit=submit</code></p>
+<p>点击后用户信息被修改成aaa</p>
+<p><img src="https://i.imgur.com/CKb0yv1.png"></p>
+<p>大致总结一下XSS与CSRF的流程区别如下</p>
+<table>
+<thead>
+<tr>
+<th>XSS</th>
+<th>CSRF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>跨站脚本攻击</td>
+<td>客户端请求伪造</td>
+</tr>
+<tr>
+<td>C用户-&gt;登录-&gt;A站(存在xss漏洞)</td>
+<td>C用户-&gt;登录A站(存在CSRF漏洞)</td>
+</tr>
+<tr>
+<td>C用户点击了B用户发的恶意链接</td>
+<td>C用户点击了B用户发的恶意链接</td>
+</tr>
+<tr>
+<td>C用户的cookie泄露给了B</td>
+<td></td>
+</tr>
+<tr>
+<td>B用户可以利用cookie直接操作C用户在A网站的账户</td>
+<td>B用户以C用户的身份向A站发送功能请求</td>
+</tr>
+</tbody></table>
+<h1 id="防护手段"><a href="#防护手段" class="headerlink" title="防护手段"></a>防护手段</h1><h2 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h2><p><img src="https://i.imgur.com/8Pj4ADu.png"></p>
+<h2 id="同源策略（SOP）"><a href="#同源策略（SOP）" class="headerlink" title="同源策略（SOP）"></a>同源策略（SOP）</h2><p>同源策略是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，浏览器很容易受到XSS、CSRF等攻击。所谓同源是指”协议+域名+端口”三者相同，即便两个不同的域名指向同一个ip地址，也非同源。</p>
+<p>基本功能：<strong>不允许来自不同来源的 2 个网页相互干扰。</strong></p>
+<p>以<code>http://www.aa.com:8080/index/vue.js</code>为例</p>
+<table>
+<thead>
+<tr>
+<th>http:&#x2F;&#x2F;</th>
+<th>www.</th>
+<th>aaa.com</th>
+<th>:8080</th>
+<th>&#x2F;index&#x2F;vue.js</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议</td>
+<td>子域名</td>
+<td>主域</td>
+<td>端口</td>
+<td>路径</td>
+</tr>
+</tbody></table>
+<p>其中，同源主要指得是协议+域名+端口号前三者相同，前三者任一个不一样则会产生跨域。</p>
+<p><img src="https://i.imgur.com/0HeaNxc.png"></p>
+<h2 id="安全令牌"><a href="#安全令牌" class="headerlink" title="安全令牌"></a>安全令牌</h2><p><img src="https://i.imgur.com/xiSnCcC.png"></p>
+<h1 id="攻击演示-1"><a href="#攻击演示-1" class="headerlink" title="攻击演示"></a>攻击演示</h1><p>前置：一个存在CSRF漏洞的网站，两个任意用户</p>
+<h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>这里使用用户A进行修改信息的操作包并使用burp抓取到包,然后生成POC包</p>
+<p><img src="https://i.imgur.com/CKmbzkd.gif"></p>
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>验证使用POC，注意此时使用另一个用户进行验证</p>
+<p>两种方式</p>
+<ul>
+<li><p>1.使用Burp的直接生成链接<br><img src="https://i.imgur.com/gzLsRoZ.gif"></p>
+</li>
+<li><p>2.构造.html文件<br>新建一个文件直接粘贴生成的poc内容，然后将文件后缀修改成html。<br><img src="https://i.imgur.com/Wh909dP.gif"><br>然后拖拽到浏览器打开<br><img src="https://i.imgur.com/T36mbWp.png"></p>
+</li>
+</ul>
+<p>会有一个提交请求的按钮，在原生成poc的网页登录没有下线的情况下，点击这个提交按钮回返回1，但这里原登录下线了，所以请求失败</p>
+<p><img src="https://i.imgur.com/LUwe3oA.gif"></p>
+<p>后续重新登录再刷新则请求成功</p>
+<p><img src="https://i.imgur.com/1pVqd0P.gif"></p>
+<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p>查看结果，修改后两个用户的信息一致，证明CSRF攻击成功</p>
+<p><img src="https://i.imgur.com/zfr8vOO.png"></p>
+<h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><p>GET  <a target="_blank" rel="noopener" href="http://bank.com/?m=1000&uid=1445">http://bank.com?m=1000&amp;uid=1445</a><br>链接类型的 csrf <a target="_blank" rel="noopener" href="http://bank.com/?m=1000&uid=1445">http://bank.com?m=1000&amp;uid=1445</a></p>
+<h1 id="绕过方法"><a href="#绕过方法" class="headerlink" title="绕过方法"></a>绕过方法</h1><p>参照：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6176?time__1311=n4+xnD0DgDcDR77GOYD/ia4BK5D54hqG=3CQQO4D">绕过CSRF防御 - 先知社区 (aliyun.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://threezh1.com/2020/02/25/CSRF%E7%BB%95%E8%BF%87%E6%95%B4%E7%90%86/">Threezh1’Blog</a></li>
+</ul>
+<p>常见的绕过方法：</p>
+<ol>
+<li>未考虑不存在的情况下，达到绕过效果，删除或置空参数：refere,cdrf_token</li>
+<li>如果这个scrf_token他是用post方式进行传参，通过修改传参方式达到绕过</li>
+<li>和会话进行绑定，一次性token,公共池拿到的token</li>
+</ol>
+<p>简单试着列个表看下</p>
+<table>
+<thead>
+<tr>
+<th>应用场景</th>
+<th>绕过方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通用类型</td>
+<td>点击劫持</td>
+</tr>
+<tr>
+<td>请求方式可修改</td>
+<td>GET-&gt;POST或者POST-&gt;GET</td>
+</tr>
+<tr>
+<td>CSRF token效验</td>
+<td>删除token参数或发送空token</td>
+</tr>
+<tr>
+<td>CSRF token检查是否合法</td>
+<td>使用另一个session的CSRF token</td>
+</tr>
+<tr>
+<td>Referer字段的CSRF防御</td>
+<td>移除referer字段或者置空</td>
+</tr>
+<tr>
+<td>基于白名单的referer检查</td>
+<td>尝试绕过验证URL的正则表达式。</td>
+</tr>
+<tr>
+<td>域名校验</td>
+<td>后面加域名&#x2F;拼接域名&#x2F;前后加字符</td>
+</tr>
+</tbody></table>
+<h1 id="话题提及"><a href="#话题提及" class="headerlink" title="话题提及"></a>话题提及</h1><ol>
+<li>csrf+xss(存储型)的联动</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zkaqlaoniao/article/details/134399773">漏洞-任意账号注册_任意用户注册漏洞危害-CSDN博客</a></li>
+<li>换行回车注入  jsonp劫持    包中有callback参数</li>
+<li>XSS钓鱼网站</li>
+<li><a target="_blank" rel="noopener" href="https://51tbox.com/web/blog/detail/1297.html">CSRF攻击修改用户微信绑定（SRC思路）-工具盒子 (51tbox.com)</a>再绑定qq或者微信时，抓到我们 绑定的包，吧那些包六七但留下链接、</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/csrf/" rel="tag"># csrf</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/04/%E6%9C%AA%E5%91%BD%E5%90%8D/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/06/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" rel="next" title="命令执行/代码执行学习基础">
+      命令执行/代码执行学习基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%BC%94%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">攻击演示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E6%8A%A4%E6%89%8B%E6%AE%B5"><span class="nav-number">3.</span> <span class="nav-text">防护手段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">验证码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%EF%BC%88SOP%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">同源策略（SOP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E4%BB%A4%E7%89%8C"><span class="nav-number">3.3.</span> <span class="nav-text">安全令牌</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%BC%94%E7%A4%BA-1"><span class="nav-number">4.</span> <span class="nav-text">攻击演示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5"><span class="nav-number">4.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5"><span class="nav-number">4.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5"><span class="nav-number">4.3.</span> <span class="nav-text">第三步</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">绕过方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%9D%E9%A2%98%E6%8F%90%E5%8F%8A"><span class="nav-number">7.</span> <span class="nav-text">话题提及</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kec的博客"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">kec的博客</p>
+  <div class="site-description" itemprop="description">一句话的长度</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://1234567fang.github.io/" title="https:&#x2F;&#x2F;1234567fang.github.io&#x2F;" rel="noopener" target="_blank">友链</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kec的博客</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"搜索帖子","hits_empty":"我们没有找到任何搜索结果: ${query}","hits_stats":"在 ${time} 毫秒内找到 ${hits} 结果"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于寄存器和汇编语言指令的简单学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寄存器与汇编语言">
+<meta property="og:url" content="http://example.com/2024/10/20/%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于寄存器和汇编语言指令的简单学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/ea0VR8R.png">
+<meta property="og:image" content="https://i.imgur.com/3hpIhst.gif">
+<meta property="og:image" content="https://i.imgur.com/xHxBPxw.gif">
+<meta property="og:image" content="https://i.imgur.com/PeU8KC0.gif">
+<meta property="og:image" content="https://i.imgur.com/gUiLaNc.gif">
+<meta property="og:image" content="https://i.imgur.com/tE6WShy.gif">
+<meta property="og:image" content="https://i.imgur.com/ilmzO0H.gif">
+<meta property="og:image" content="https://i.imgur.com/SvqeuvE.png">
+<meta property="og:image" content="https://i.imgur.com/IjX8lV9.gif">
+<meta property="og:image" content="https://i.imgur.com/tGQp7Do.gif">
+<meta property="og:image" content="https://i.imgur.com/pZW182x.gif">
+<meta property="og:image" content="https://i.imgur.com/HmSa6AT.gif">
+<meta property="article:published_time" content="2024-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-23T11:36:02.618Z">
+<meta property="article:author" content="kec的博客">
+<meta property="article:tag" content="寄存器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/ea0VR8R.png">
+
+<link rel="canonical" href="http://example.com/2024/10/20/%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>寄存器与汇编语言 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/20/%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          寄存器与汇编语言
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2024-10-20T00:00:00+08:00">2024-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-23 19:36:02" itemprop="dateModified" datetime="2024-10-23T19:36:02+08:00">2024-10-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%80%86%E5%90%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">逆向学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>关于寄存器和汇编语言指令的简单学习</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<span id="more"></span>
+
+
+<p><img src="https://i.imgur.com/ea0VR8R.png"></p>
+<h2 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h2><p>首当其冲的是通用寄存器，这些的寄存器是程序执行代码最最常用，也最最基础的寄存器，程序执行过程中，绝大部分时间都是在操作这些寄存器来实现指令功能。</p>
+<p>所谓通用，即这些寄存器CPU没有特殊的用途，交给应用程序“随意”使用。注意，这个随意，我打了引号，对于有些寄存器，CPU有一些潜规则，用的时候要注意。</p>
+<blockquote>
+<ul>
+<li><strong>eax</strong>: 通常用来执行加法，函数调用的返回值一般也放在这里面</li>
+<li><strong>ebx</strong>: 数据存取</li>
+<li><strong>ecx</strong>: 通常用来作为计数器，比如for循环</li>
+<li><strong>edx</strong>: 读写I&#x2F;O端口时，edx用来存放端口号</li>
+<li><strong>esp</strong>: 栈顶指针，指向栈的顶部</li>
+<li><strong>ebp</strong>: 栈底指针，指向栈的底部，通常用<code>ebp+偏移量</code>的形式来定位函数存放在栈中的局部变量</li>
+<li><strong>esi</strong>: 字符串操作时，用于存放数据源的地址</li>
+<li><strong>edi</strong>: 字符串操作时，用于存放目的地址的，和esi两个经常搭配一起使用，执行字符串的复制等操作</li>
+</ul>
+</blockquote>
+<p>mov指令，将后面参数得值赋值给前面寄存器</p>
+<p><img src="https://i.imgur.com/3hpIhst.gif"></p>
+<p>add指令，将后面参数加到前面寄存器<br><img src="https://i.imgur.com/xHxBPxw.gif"></p>
+<p>sub指令，以后面参数再寄存器减去</p>
+<p><img src="https://i.imgur.com/PeU8KC0.gif"></p>
+<h2 id="内存的读写"><a href="#内存的读写" class="headerlink" title="内存的读写"></a>内存的读写</h2><h3 id="寻址公式一：-立即数"><a href="#寻址公式一：-立即数" class="headerlink" title="寻址公式一：[立即数]"></a>寻址公式一：[立即数]</h3><p><strong>读取数据内存值</strong><br>MOV EAX,宽度 地址 DS(立即数)</p>
+<p>MOV EAX,DWORD PTR DS:[0X13FFC4]</p>
+<p>其他两种，<br>MOV EAX,DWORD PTR SS:[ESP或者EBP]<br>MOV EAX,DWORD PTR ES:[EDI]<br>此处主要讲立即数DS</p>
+<p>示例：</p>
+<p>MOV EAX,DWORD PTR DS:[12FFC4]<br>取右下角地址编号[12FFC4]位置的值赋值到寄存器EAX</p>
+<p><img src="https://i.imgur.com/gUiLaNc.gif"></p>
+<p><strong>向内存中写入数据：</strong></p>
+<p>MOV DWORD PTR DS:[0X13FFC4],EAX<br>MOV DWORD PTR DS:[0X13FFC4],EAX</p>
+<p>示例：</p>
+<p>MOV DWORD PTR DS:[12FFC4],87654321<br>将87654321的值写入内存地址[12FFC4]指向的位置中</p>
+<p><img src="https://i.imgur.com/tE6WShy.gif"></p>
+<p><strong>获取内存编号：</strong></p>
+<p>LEA EAX,DWORD PTR DS:[0X13FFC4]<br>LEA EAX,DWORD PTR DS:[ESP+8]</p>
+<p>示例：</p>
+<p>LEA ECX,DWORD PTR DS:[12FFC4]<br>取内存地址[12FFC4]存到ECX中<br><img src="https://i.imgur.com/ilmzO0H.gif"></p>
+<h3 id="寻址公式二：-reg-reg代表任意八个通用寄存器中的任一个"><a href="#寻址公式二：-reg-reg代表任意八个通用寄存器中的任一个" class="headerlink" title="寻址公式二：[reg] reg代表任意八个通用寄存器中的任一个"></a>寻址公式二：[reg] reg代表任意八个通用寄存器中的任一个</h3><p>读取内存值：</p>
+<p>MOV ECS,0x13FFD0<br>MOV EAX,DWORD PTR DS:[ECX]</p>
+<p>向内存写入数据：</p>
+<p>MOV EDX,0x13FFD8<br>MOV DWORD PTR DS:[EDS],0X87654321</p>
+<p>获取内存编号:</p>
+<p>LEA EAX,DWORD PTR DS:[EDX]<br>MOV EAX,DWORD PTR DS:[EDX]</p>
+<h3 id="寻址公式三：-reg-立即数"><a href="#寻址公式三：-reg-立即数" class="headerlink" title="寻址公式三：[reg+立即数]"></a>寻址公式三：[reg+立即数]</h3><p>读取内存值：</p>
+<p>MOV ECX,0X13FFD0<br>MOV EAX,DWORD PTR DS:[ECX+4]</p>
+<p>向内存中写入数据：</p>
+<p>MOV EDX,0x13FFD8<br>MOV DWORD PTR DS:[EDX+0xC],0X87654321</p>
+<p>获取到内存编号：</p>
+<p>LEA EAX,DWORD PTR DS:[EDX+4]<br>MOV EAX,DWORD PTR DS:[EDX+4]</p>
+<h3 id="公式四-reg-reg-1-2-4-8"><a href="#公式四-reg-reg-1-2-4-8" class="headerlink" title="公式四:[reg+reg*{1,2,4,8}]"></a>公式四:[reg+reg*{1,2,4,8}]</h3><p>读取值：</p>
+<p>MOV EAX,13FFC4<br>MOV ECX,2<br>MOV EDX,DWORD PTR DS:[EAX+ECX*4]</p>
+<p>最后等价于将[EAX+8]赋值到EDX</p>
+<p>后续写数据和获取编号类似用法</p>
+<h3 id="寻址公式五-reg-reg-1-2-4-8-立即数"><a href="#寻址公式五-reg-reg-1-2-4-8-立即数" class="headerlink" title="寻址公式五:[reg+reg*[1,2,4,8]+立即数]"></a>寻址公式五:[reg+reg*[1,2,4,8]+立即数]</h3><p>读取值：</p>
+<p>MOV EAX,13FFC4<br>MOV ECX,2<br>MOV EDX,DWORD PTR DS:[EAX+ECX*4+4]</p>
+<p>结果相当于[EAX+8+4]赋值到EDX</p>
+<p>后续差不多</p>
+<h2 id="堆栈"><a href="#堆栈" class="headerlink" title="堆栈"></a>堆栈</h2><ol>
+<li>本质是内存</li>
+<li>主要存储临时变量</li>
+<li>用于系统维护，主要对于开发人员是透明的</li>
+</ol>
+<p><img src="https://i.imgur.com/SvqeuvE.png"></p>
+<p>示例：</p>
+<p>PUSH 12345678（压值)向栈里存值，栈顶ESP减少4，栈底ESP不变，右下角可以看到增加了一个值</p>
+<p><img src="https://i.imgur.com/IjX8lV9.gif"></p>
+<p>PUSH EAX                 将EAX中的值放到栈里，ESP再减少4</p>
+<p><img src="https://i.imgur.com/tGQp7Do.gif"></p>
+<p>POP ECX             将栈顶ESP内存的值取出到ECX，ESP的值增加4</p>
+<p><img src="https://i.imgur.com/pZW182x.gif"></p>
+<p>POP EDX        将栈顶ESP去一个值，到EDX，ESP的值增加4</p>
+<p><img src="https://i.imgur.com/HmSa6AT.gif"></p>
+<h2 id="变形的艺术"><a href="#变形的艺术" class="headerlink" title="变形的艺术"></a>变形的艺术</h2><p>push eax 可以拆分为</p>
+<ul>
+<li>将esp的值减4（一种表述）：<ul>
+<li>lea esp,dword ptr ss:[esp-4]</li>
+</ul>
+</li>
+<li>将eax的值赋值到esp的内存中（三种表述）：<ul>
+<li>mov dword ptr ss:[esp],eax</li>
+<li>mov esp,esp-4 </li>
+<li>sub esp,4<br>两个步骤顺序可以任意排列，表述也可以任意组合</li>
+</ul>
+</li>
+</ul>
+<p>以此类推，push eax有多种不同的变形方式或者说有多种方式可以达到push eax的效果</p>
+<p>类似的，pop ecx 代码可以拆分为 </p>
+<ul>
+<li>将esp地址的值赋值到ecx：<ul>
+<li>mov ecx,dword ptr ss:[esp]</li>
+</ul>
+</li>
+<li>将esp的值加上4:<ul>
+<li>lea esp,dword ptr ss:[esp+4]</li>
+<li>mov esp,esp+4</li>
+<li>add esp,4</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>[!NOTE] 练习<br>push esp   会如何拆分，如何变形</p>
+</blockquote>
+<p>STPS 指令的作用是将EAX中的值拷贝到EDI指向的地址：</p>
+<p>MOV EAX,12345678<br>LEA EDI,DWORD PTR SS[ESP]<br>STOS DWORD PTR ES:[EDI]</p>
+<p>这段代码大致就是<br>首先将12345678的赋值到EAX寄存器中，然后将ESP的内存地址取到LEA中<br>再用STOS将EAX的值拷贝到EDId的内存地址(第二步中获取到的ESP的地址)所指向的值</p>
+<p>REP指令的目的是重复，而ECX的值为重复的次数</p>
+<p>MOV EAX,0x22222222<br>MOV ECX,2<br>LEA EDI,DWORD PTR SS:[ESP]<br>REP STOS DWORD PTR ES:[EDI]</p>
+<p>大致就是<br>首先将22222222赋值给了EAX，然赋值ECX&#x3D;2，确定循环的次数为2<br>再就是将ESP的地址赋值到EDI<br>最后循环两次，以此将EAX的值丢给EDI，之后EDI自己增加4<br>再将EAX的值丢给[EDI+4],之后EDI再自己+4</p>
+<blockquote>
+<p>[!NOTE] 练习<br>PUSH EBP<br>MOV EBP<br>SUB ESP,40<br>PUSH EBX<br>PUSH ESI<br>PUS EDI<br>LEA EDI,DWORD PTR SS:[EBP-40]<br>MOV ECX,10<br>MOV ECX,10<br>MOV EAX,CCCCCCCC<br>REP STOS DWORD PTR ES:[EDI]<br>MOV EAX,DWORD PTR SS:[EBP+8]<br>ADD EAX,DWORD PTR SS:[EBP+C]<br>POP EDI<br>POP ESI<br>POP EBX<br>MOV ESP,EBP<br>POP EBP<br>RETN</p>
+<p>Contents</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag"># 寄存器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/20/%E5%A0%86%E6%A0%88%E5%9B%BE/" rel="prev" title="堆栈图">
+      <i class="fa fa-chevron-left"></i> 堆栈图
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/23/%E8%BF%9B%E5%88%B6/" rel="next" title="进制">
+      进制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">通用寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%9A%84%E8%AF%BB%E5%86%99"><span class="nav-number">2.</span> <span class="nav-text">内存的读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E5%85%AC%E5%BC%8F%E4%B8%80%EF%BC%9A-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">寻址公式一：[立即数]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E5%85%AC%E5%BC%8F%E4%BA%8C%EF%BC%9A-reg-reg%E4%BB%A3%E8%A1%A8%E4%BB%BB%E6%84%8F%E5%85%AB%E4%B8%AA%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8%E4%B8%AD%E7%9A%84%E4%BB%BB%E4%B8%80%E4%B8%AA"><span class="nav-number">2.2.</span> <span class="nav-text">寻址公式二：[reg] reg代表任意八个通用寄存器中的任一个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E5%85%AC%E5%BC%8F%E4%B8%89%EF%BC%9A-reg-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">寻址公式三：[reg+立即数]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%E5%9B%9B-reg-reg-1-2-4-8"><span class="nav-number">2.4.</span> <span class="nav-text">公式四:[reg+reg*{1,2,4,8}]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E5%85%AC%E5%BC%8F%E4%BA%94-reg-reg-1-2-4-8-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">寻址公式五:[reg+reg*[1,2,4,8]+立即数]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-number">3.</span> <span class="nav-text">堆栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E5%BD%A2%E7%9A%84%E8%89%BA%E6%9C%AF"><span class="nav-number">4.</span> <span class="nav-text">变形的艺术</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kec的博客"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">kec的博客</p>
+  <div class="site-description" itemprop="description">一句话的长度</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://1234567fang.github.io/" title="https:&#x2F;&#x2F;1234567fang.github.io&#x2F;" rel="noopener" target="_blank">友链</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kec的博客</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

